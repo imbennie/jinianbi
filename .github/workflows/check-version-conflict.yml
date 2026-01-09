@@ -20,7 +20,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 检查脚本文件是否修改
+        id: check-file-changed
+        run: |
+          git fetch origin main
+          if git diff --name-only origin/main...HEAD | grep -q "纪念币预约辅助工具.user.js"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ 脚本文件已修改，需要检查版本号"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ 脚本文件未修改，跳过版本号检查"
+          fi
+
       - name: 获取源分支版本号
+        if: steps.check-file-changed.outputs.changed == 'true'
         id: source-version
         run: |
           SOURCE_VERSION=$(grep -m1 "@version" 纪念币预约辅助工具.user.js | sed 's/.*@version[[:space:]]*//;s/[[:space:]]*$//')
@@ -28,6 +41,7 @@ jobs:
           echo "源分支版本: $SOURCE_VERSION"
 
       - name: 获取目标分支版本号
+        if: steps.check-file-changed.outputs.changed == 'true'
         id: target-version
         run: |
           git fetch origin main
@@ -36,6 +50,7 @@ jobs:
           echo "目标分支版本: $TARGET_VERSION"
 
       - name: 验证版本号不同
+        if: steps.check-file-changed.outputs.changed == 'true'
         run: |
           SOURCE_VERSION="${{steps.source-version.outputs.version}}"
           TARGET_VERSION="${{steps.target-version.outputs.version}}"
@@ -53,7 +68,7 @@ jobs:
           echo "✅ 版本号检查通过"
 
       - name: 发布评论
-        if: failure()
+        if: failure() && steps.check-file-changed.outputs.changed == 'true'
         uses: actions/github-script@v7
         with:
           script: |
