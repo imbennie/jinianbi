@@ -95,7 +95,8 @@ const bankObj = {
             '.customer-name',
             '[id*="custName"]',
             '[id*="name"]',
-            '[id*="USR_NM"]'
+            '[id*="USR_NM"]',
+            '.cell > .information-input:nth-of-type(1) .el-input__inner'
         ],
         // 身份证可能的 ID/Class/Name
         idCard: [
@@ -115,7 +116,8 @@ const bankObj = {
             '[id*="cert"]',
             '[id*="idCard"]',
             '[id*="IdCard"]',
-            '[id*="CRDT_NO"]'
+            '[id*="CRDT_NO"]',
+            '.cell > .information-input:nth-of-type(1) .el-input__inner'
         ],
         // 手机号可能的 ID/Class/Name
         mobile: [
@@ -136,7 +138,8 @@ const bankObj = {
             '[id*="mobile"]',
             '[id*="phone"]',
             '[id*="tel"]',
-            '[id*="MBLPH_NO"]'
+            '[id*="MBLPH_NO"]',
+            '.cell > .information-input:nth-of-type(4) .el-input__inner'
         ],
         // 预约数量可能的 ID/Class/Name
         amount: [
